@@ -19,7 +19,7 @@ function Login() {
       </div>
         <div className='container'>
           <label htmlFor='uname'><b>Username</b></label>
-          <input type='text' name='uname' placeholder='Enter username' required/>
+          <input type='email' name='uname' placeholder='Enter username' required/>
 
           <label for="psw"><b>Password</b></label>
           <input type="password" placeholder="Enter Password" name="psw" required/>

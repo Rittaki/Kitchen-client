@@ -7,7 +7,8 @@ function Register() {
     const [password, setPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
 
-    function sendRegisterRequest() {
+    function sendRegisterRequest(e) {
+        e.preventDefault();
         if (password != repeatPassword) {
             alert("repeated password must be identical to password");
         } else {
@@ -45,7 +46,7 @@ function Register() {
                     <label htmlFor="psw"><b>Repeat Password</b></label>
                     <input type="password" placeholder="Enter Password" name="psw" required onChange={(e) => setRepeatPassword(e.target.value)} />
 
-                    <button type="submit" onClick={() => sendRegisterRequest()}>Register</button>
+                    <button type="submit" onClick={(e) => sendRegisterRequest(e)}>Register</button>
                 </div>
                 <div className="container">
                     <span className="register">Already have an account? <a href="/login">Login</a></span>

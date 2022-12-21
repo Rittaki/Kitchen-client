@@ -6,6 +6,7 @@ import Recipes from "./Recipes/Recipes";
 import Homepage from "./Homepage/Homepage";
 import PrivateRoute from "./PrivateRoute";
 import Register from "./Register/Register";
+import RecipeView from "./RecipeView/RecipeView";
 
 function App() {
 
@@ -47,6 +48,14 @@ function App() {
             <Recipes />
           </PrivateRoute>
         }
+      />
+      <Route
+      path="/recipes/:id"
+      element={
+        <PrivateRoute>
+        <RecipeView />
+        </PrivateRoute>
+      }
       />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />

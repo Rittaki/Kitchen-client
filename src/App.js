@@ -7,6 +7,12 @@ import Homepage from "./Homepage/Homepage";
 import PrivateRoute from "./PrivateRoute";
 import Register from "./Register/Register";
 import RecipeView from "./RecipeView/RecipeView";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+} from "react-router-dom";
 
 function App() {
 
@@ -49,8 +55,9 @@ function App() {
           </PrivateRoute>
         }
       />
+      
       <Route
-      path="/recipes/:id"
+      path="/recipes/:id/"
       element={
         <PrivateRoute>
         <RecipeView />
@@ -59,7 +66,7 @@ function App() {
       />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/" element={<Homepage />} />
+      <Route path="/recipes" element={<Homepage />} />
     </Routes>
   );
 }

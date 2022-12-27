@@ -1,39 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
+import RecipeView from '../RecipeView/RecipeView';
+import ajax from '../Services/fetchService';
 import { useLocalState } from '../util/utilLocalStorage';
 import "./Recipes.css"
 
 function Recipes() {
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [recipes, setRecipes] = useState(null);
+    const [user, setUser] = useLocalState("", "user");
 
     useEffect(() => {
-        fetch("/api/recipe/all", {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${jwt}`
-            },
-            method: "GET",
-        }).then(response => {
-            if (response.status === 200) return response.json();
-        }).then(recipesData => {
+        ajax("/api/recipe/all", "GET", jwt)
+        .then(recipesData => {
             console.log(recipesData);
             setRecipes(recipesData);
         });
     }, []);
 
     function createRecipe() {
-        fetch('/api/recipe/stam', {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${jwt}`,
-            },
-            method: "POST",
-        }).then(response => {
-            if (response.status === 200) return response.json();
-        }).then(recipe => {
+        ajax('/api/recipe/stam', "POST", jwt)
+        .then(recipe => {
             console.log(recipe);
-            // window.location.href = `/recipes/${recipe.id}`;
+            window.location.href = `/recipes/${recipe.id}`;
         });
     }
 
@@ -43,7 +32,13 @@ function Recipes() {
                 {recipes ? recipes.map((recipe, key) =>
                     <div key={recipe.id}><Link to={`/recipes/${recipe.id}`} >
                         Recipe's name: {recipe.name}
-                    </Link></div>)
+                    </Link>
+                    {(user === recipe.user.email)
+                    ? <Link to={`/recipes/${recipe.id}`} component={{RecipeView}} 
+                    state={{recipe: recipe, id: recipe.id}}>{' '}Update</Link>
+                    : null
+                    }
+                    </div>)
                     : <div></div>}
                 <button id='add-recipe-button' onClick={() => createRecipe()}>Add new recipe</button>
             </div>

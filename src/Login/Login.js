@@ -2,11 +2,20 @@ import { useState, useEffect } from "react";
 import React from 'react'
 import './Login.css'
 import { useLocalState } from "../util/utilLocalStorage";
+import ajax from "../Services/fetchService";
+import { Button, Col, Container, Row, Form } from "react-bootstrap";
+// import { Form } from "react-router-dom";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [jwt, setJwt] = useLocalState("", "jwt");
+  const [user, setUser] = useLocalState("", "user");
+  const [checked, setChecked] = useState(true);
+
+  const handleChange = () => {
+    setChecked(!checked);
+  };
 
   function sendLoginRequest(e) {
     e.preventDefault();
@@ -15,6 +24,7 @@ function Login() {
       password: password,
     };
 
+    // ajax('/api/auth/login', "POST", jwt, reqBody)
     fetch('/api/auth/login', {
       method: "post",
       headers: {
@@ -32,6 +42,7 @@ function Login() {
       })
       .then(([body, headers]) => {
         setJwt(headers.get("authorization"));
+        setUser(username);
         window.location.href = "recipes";
       }).catch((message) => {
         alert(message);
@@ -40,29 +51,35 @@ function Login() {
   }
 
   return (
-    <div className='login-form'>
-      <form>
+    <Container >
+      <Form className='login-form'>
+
         <div className="imgcontainer">
           <img src='/images/profile.png' alt="Avatar" className="avatar" />
         </div>
-        <div className='container'>
-          <label htmlFor='uname'><b>Username</b></label>
-          <input type='email' placeholder='Enter username' value={username} onChange={(e) => setUsername(e.target.value)} required />
 
-          <label htmlFor="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <Container>
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="username"><b>Username</b></Form.Label>
+            <Form.Control id="username" type="email" placeholder="Enter username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+          </Form.Group>
 
-          <button type="submit" onClick={(e) => sendLoginRequest(e)}>Login</button>
-          <label>
-            <input type="checkbox" checked="checked" /> Remember me
-          </label>
-        </div>
-        <div className="container">
-          <span className="register"><a href="#">Register</a></span>
-          <span className="psw">Forgot <a href="#">password?</a></span>
-        </div>
-      </form>
-    </div>
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="password"><b>Password</b></Form.Label>
+            <Form.Control id="password" type="password" placeholder="Enter Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </Form.Group>
+
+          <Button className="login-button" type="submit" onClick={(e) => sendLoginRequest(e)}>Login</Button>
+          <Form.Group className="mb-3" controlId="formBasicCheckbox">
+            <Form.Check type="switch" id="custom-switch" checked={checked} onChange={handleChange} label="Remember me" />
+          </Form.Group>
+          <div>
+            <span className="register"><a href="#">Register</a></span>
+            <span className="psw">Forgot <a href="#">password?</a></span>
+          </div>
+        </Container>
+      </Form>
+    </Container>
   )
 }
 

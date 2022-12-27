@@ -24,7 +24,45 @@ input[type=email], input[type=password] {
   box-sizing: border-box;
 }
 
-button {
+input#username.form-control:focus {
+  outline: none ;
+  border-color: #db7900;
+  box-shadow: none ;
+}
+
+input#password.form-control:focus {
+  outline: none ;
+  border-color: #db7900;
+  box-shadow: none;
+}
+
+input#custom-switch.form-check-input:checked {
+  background-color: #db7900;
+  border-color: #db7900;
+  outline: none;
+  box-shadow: none;
+  -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+input#custom-switch.form-check-input {
+  /* background-color: #db7900; */
+  /* border-color: #db7900; */
+  outline: none;
+  box-shadow: none;
+  -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+input#custom-switch.form-check-input:focus {
+  outline: none ;
+  /* border-color: #db7900; */
+  box-shadow: none;
+  -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.btn.login-button {
   background-color: #db7900;
   color: white;
   padding: 14px 20px;
@@ -34,7 +72,8 @@ button {
   width: 100%;
 }
 
-button:hover {
+.btn.login-button:hover {
+  background-color: #db7900;
   opacity: 0.8;
 }
 

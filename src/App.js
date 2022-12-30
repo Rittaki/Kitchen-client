@@ -8,11 +8,7 @@ import PrivateRoute from "./PrivateRoute";
 import Register from "./Register/Register";
 import RecipeView from "./RecipeView/RecipeView";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  RouterProvider,
-} from "react-router-dom";
+import NewRecipe from "./NewRecipe/NewRecipe";
 
 function App() {
 
@@ -55,15 +51,25 @@ function App() {
           </PrivateRoute>
         }
       />
-      
+
       <Route
-      path="/recipes/:id/"
-      element={
-        <PrivateRoute>
-        <RecipeView />
-        </PrivateRoute>
-      }
+        path="/recipes/:id/"
+        element={
+          <PrivateRoute>
+            <RecipeView />
+          </PrivateRoute>
+        }
       />
+
+      <Route
+        path="/recipes/new/"
+        element={
+          <PrivateRoute>
+            <NewRecipe />
+          </PrivateRoute>
+        }
+      />
+
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/recipes" element={<Homepage />} />

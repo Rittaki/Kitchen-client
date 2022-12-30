@@ -1,3 +1,7 @@
 #add-recipe-button {
     width: auto;
 }
+
+p:empty{
+   display: none;
+}

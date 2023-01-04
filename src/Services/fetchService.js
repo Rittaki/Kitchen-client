@@ -1,13 +1,13 @@
 import React from 'react'
 import { useLocalState } from '../util/utilLocalStorage';
 
-function ajax(url, requestMethod, jwt, requestBody) {
+function ajax(url, requestMethod, jwt, requestBody, isMultipart) {
     // const [jwt, setJwt] = useLocalState("", "jwt");
     // const [user, setUser] = useLocalState("", "user");
     const fetchData = {
-        headers: {
+        headers: !isMultipart ? {
             "Content-Type": "application/json"
-        },
+        } : {},
         method: requestMethod
     }
 

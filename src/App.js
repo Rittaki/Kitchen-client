@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Login from "./Login/Login";
 import { useLocalState } from "./util/utilLocalStorage";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Recipes from "./Recipes/Recipes";
 import Homepage from "./Homepage/Homepage";
 import PrivateRoute from "./PrivateRoute";
@@ -43,6 +43,15 @@ function App() {
 
   return (
     <Routes>
+      <Route
+        path="/"
+        element={
+          <PrivateRoute>
+            <Navigate to="/recipes" />
+          </PrivateRoute>
+        }
+      />
+
       <Route
         path="/recipes"
         element={

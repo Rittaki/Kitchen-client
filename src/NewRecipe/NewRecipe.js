@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Col, Form, Row } from 'react-bootstrap'
+import { Button, ButtonGroup, Col, Dropdown, DropdownButton, Form, Row } from 'react-bootstrap'
 import { Link, Navigate } from 'react-router-dom';
 import Recipes from '../Recipes/Recipes';
 import ajax from '../Services/fetchService';
@@ -13,8 +13,13 @@ function NewRecipe() {
     const [description, setDescription] = useState("");
     const [directions, setDirections] = useState("");
     const [ingredients, setIngredients] = useState("");
+    const [imageToSend, setImageToSend] = useState(null);
+    const [image, setImage] = useState(null);
     const [isSubmit, setIsSubmit] = useState(false);
     const [toCreate, setToCreate] = useState(false);
+    const [goodInput, setGoodInput] = useState(false);
+
+    const categories = ['drink', 'beverage', 'dinner', 'breakfast'];
 
     function submitFunc() {
         // e.preventDefault();
@@ -49,15 +54,22 @@ function NewRecipe() {
     }, [errors]);
 
     if (toCreate) {
-        const reqBody = {
-            name: name,
-            category: category,
-            description: description,
-            directions: directions.split(';'),
-            ingredients: ingredients.split(','),
+        const recipeObject = {
+            'name': name, 'category': category, 'description': description,
+            'directions': directions.split(';'), 'ingredients': ingredients.split(',')
         };
+        const formData = new FormData();
+        formData.append('file', image);
+        formData.append('recipe', JSON.stringify(recipeObject));
 
-        ajax("/api/recipe/new", "POST", jwt, reqBody)
+        console.log(formData);
+        fetch('/api/recipe/stam', {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${jwt}`
+            },
+            body: formData,
+        })
             .then(recipesData => {
                 console.log(recipesData);
             });
@@ -81,10 +93,18 @@ function NewRecipe() {
                 <Form.Label column="lg" htmlFor='category' >
                     Category
                 </Form.Label>
-                <Form.Control id='category'
-                    size="md" type="text"
-                    placeholder="Category"
-                    onChange={(e) => setCategory(e.target.value)} />
+                <Row>
+                    <DropdownButton
+                        as={ButtonGroup}
+                        id="category-name"
+                        title={category ? category : "Choose a category"}
+                        onSelect={(e) => setCategory(e)}>
+                        {categories.map((recipeCategory) => (
+                            <Dropdown.Item key={recipeCategory} eventKey={recipeCategory}>
+                                {recipeCategory}
+                            </Dropdown.Item>))}
+                    </DropdownButton>
+                </Row>
                 <p className="error">{errors.category}</p>
             </Form.Group >
         </Row>
@@ -119,6 +139,44 @@ function NewRecipe() {
                 onChange={(e) => setDirections(e.target.value)}
             />
             <p className="error">{errors.directions}</p>
+
+            <Form.Label column="lg" htmlFor='image' >
+                Image
+            </Form.Label>
+            {!goodInput && (<div>Upload an image from your computer</div>)}
+            {image && goodInput && (
+                <div>
+                    {console.log(URL.createObjectURL(image))}
+                    <img alt="not found" width={"250px"} src={URL.createObjectURL(image)} />
+                    <br />
+                </div>
+            )}
+            {!goodInput && (
+                <div>
+                    Please choose an <b>image</b> file.
+                    <br />
+                </div>
+            )}
+            <Form.Control
+                type="file"
+                accept="image/png, image/jpeg"
+                placeholder="Choose an image"
+                onChange={(e) => {
+                    console.log(e.target.files[0].type);
+                    if (e.target.files[0].type[0] === 'i') {
+                        const imageData = new FormData();
+                        imageData.append('imageFile', e.target.files[0]);
+                        setImage(e.target.files[0]);
+                        setImageToSend(imageData);
+                        console.log(e.target.files[0]);
+                        setGoodInput(true);
+                    } else {
+                        console.log("not good input");
+                        setGoodInput(false);
+                    }
+                }
+                }
+            />
 
             <Button variant="secondary" >
                 Close
